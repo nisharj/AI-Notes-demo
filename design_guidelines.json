@@ -1,0 +1,146 @@
+{
+  "identity": {
+    "name": "E1: The Anti-AI Designer",
+    "philosophy": "Fusion over Imitation. Emotion First. Content is King.",
+    "tone": "Soft Utility & Intelligent Precision",
+    "archetype": "Archetype 3 (Pastel & Soft) mixed with Archetype 4 (Swiss)"
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Manrope, sans-serif",
+      "body": "Inter, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+      "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+      "h3": "text-2xl font-semibold tracking-tight",
+      "body_large": "text-lg leading-relaxed",
+      "body_base": "text-base leading-relaxed",
+      "caption": "text-sm text-muted-foreground"
+    },
+    "rules": [
+      "Never use Inter for Headings.",
+      "Use tight tracking (tracking-tight) for all headings over 24px.",
+      "Use relaxed leading (leading-relaxed) for all body text to improve readability."
+    ]
+  },
+  "colors": {
+    "palette": {
+      "light": {
+        "background": "#FDFCF8",
+        "foreground": "#1A1918",
+        "card": "#FFFFFF",
+        "card_foreground": "#1A1918",
+        "primary": "#4F46E5",
+        "primary_foreground": "#FFFFFF",
+        "muted": "#F2F0E9",
+        "muted_foreground": "#78716C",
+        "border": "#E7E5E4"
+      },
+      "dark": {
+        "background": "#0C0C0E",
+        "foreground": "#EDEDEC",
+        "card": "#18181B",
+        "card_foreground": "#EDEDEC",
+        "primary": "#6366F1",
+        "primary_foreground": "#FFFFFF",
+        "muted": "#27272A",
+        "muted_foreground": "#A1A1AA",
+        "border": "#27272A"
+      }
+    },
+    "usage": {
+      "primary": "Use ONLY for primary actions (Save, Create, Ask AI).",
+      "accent": "Use Electric Indigo for AI-related elements (Summarize, Search).",
+      "background": "Avoid pure white (#FFFFFF) for the main background. Use the off-white/warm-black defined above.",
+      "gradients": "Do NOT use full-screen gradients. Use subtle mesh gradients only for the 'Ask AI' modal background."
+    }
+  },
+  "layout": {
+    "spacing_system": "Generous. Use p-6 or p-8 where p-4 is standard.",
+    "grid_strategies": {
+      "dashboard": "Control Room Grid: grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6. Dense but organized.",
+      "landing": "Tetris Grid: Asymmetrical bento grid for features. Mix wide (col-span-2) and tall (row-span-2) cards.",
+      "notes_view": "Three-Column Layout: Sidebar (Navigation) -> List (Notes) -> Editor (Content)."
+    },
+    "container": {
+      "max_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "editor_width": "max-w-3xl mx-auto"
+    }
+  },
+  "components": {
+    "buttons": {
+      "style": "rounded-md font-medium transition-all active:scale-95",
+      "variants": {
+        "default": "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+        "ghost": "hover:bg-muted hover:text-foreground",
+        "outline": "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+      }
+    },
+    "cards": {
+      "style": "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "hover": "hover:shadow-md transition-shadow duration-200"
+    },
+    "inputs": {
+      "style": "rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+    },
+    "ai_panel": {
+      "style": "glassmorphism: bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-xl"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "Use for sticky headers, toasts, and the AI Assistant panel.",
+    "borders": "Use 1px subtle borders (border-stone-200 dark:border-stone-800) to define structure instead of heavy shadows.",
+    "shadows": "Soft, diffuse shadows. shadow-[0_8px_30px_rgb(0,0,0,0.04)].",
+    "textures": "Add a subtle noise texture to the background if possible to reduce digital flatness."
+  },
+  "motion": {
+    "transitions": "transition-all duration-200 ease-out",
+    "hover_effects": "Lift up (-translate-y-1) for cards. Glow effect for AI buttons.",
+    "page_load": "Staggered fade-in for dashboard widgets."
+  },
+  "images": {
+    "landing_hero": {
+      "url": "https://images.pexels.com/photos/6894208/pexels-photo-6894208.jpeg",
+      "alt": "Clean minimalist workspace",
+      "usage": "Hero section background or side image"
+    },
+    "empty_states": {
+      "urls": [
+        "https://images.unsplash.com/photo-1692538643781-96a38f4bb91e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHdoaXRlJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NjUwNDAyNDZ8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1741527043113-d066bfcfd842?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYWJzdHJhY3QlMjAzZCUyMHNoYXBlcyUyMHdoaXRlJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NjUwNDAyNDZ8MA&ixlib=rb-4.1.0&q=85"
+      ],
+      "usage": "Use for 'No Notes Found' or 'Empty Folder' states. Apply a grayscale filter if needed to match the theme."
+    },
+    "avatars": {
+      "urls": [
+        "https://images.pexels.com/photos/789822/pexels-photo-789822.jpeg",
+        "https://images.pexels.com/photos/7552374/pexels-photo-7552374.jpeg"
+      ],
+      "usage": "User profile placeholder or Team section."
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure text meets APCA standards. Avoid light gray text on white backgrounds.",
+    "focus_states": "Visible focus rings (ring-2 ring-primary) for keyboard navigation.",
+    "reduced_motion": "Respect prefers-reduced-motion media query."
+  },
+  "instructions_to_main_agent": [
+    "1. INSTALL FONTS: Add Manrope and JetBrains Mono to the project (via Google Fonts or Fontsource).",
+    "2. CONFIGURE TAILWIND: Update tailwind.config.js with the 'Soft Utility' color palette defined above.",
+    "3. BUILD LAYOUTS: Use the 'Control Room' grid for the dashboard. Do not make it a generic list.",
+    "4. AI INTEGRATION: Design the 'Ask AI' feature as a floating panel or a distinct sidebar with a 'Glassmorphism' effect.",
+    "5. EMPTY STATES: Use the provided abstract 3D images for empty states to add visual interest.",
+    "6. DATA-TESTID: Add data-testid to all interactive elements (buttons, inputs, cards)."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Don't make generic centered layouts.",
+    "Create depth through layered design elements.",
+    "Use glass-morphism effects with backdrop filters.",
+    "Every interaction needs micro-animations.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures and noise overlays.",
+    "Use 'sonner' for toasts."
+  ]
+}

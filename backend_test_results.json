@@ -1,0 +1,38 @@
+{
+  "timestamp": "2025-12-06T17:05:50.411172",
+  "total_tests": 6,
+  "passed_tests": 5,
+  "success_rate": 0.8333333333333334,
+  "results": [
+    {
+      "name": "Health Check",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "name": "User Signup",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "name": "Get Current User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "name": "Invalid Auth Test",
+      "success": true,
+      "details": "Status: 401"
+    },
+    {
+      "name": "Get Folders",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "name": "Create Note",
+      "success": false,
+      "details": "Status: 500 (Expected: 200) | Response: Internal Server Error"
+    }
+  ]
+}

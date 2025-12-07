@@ -1,0 +1,48 @@
+.App {
+  min-height: 100vh;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glassmorphism {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.note-card-hover {
+  transition: all 0.2s ease-out;
+}
+
+.note-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-glow {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.ai-glow:hover {
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.5);
+}

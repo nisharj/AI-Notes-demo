@@ -15,8 +15,11 @@ import jwt
 from groq import Groq
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-import resend
 import base64
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 # -------------------------------------------------------------------
 # Load environment
@@ -36,8 +39,7 @@ JWT_SECRET = os.environ.get("JWT_SECRET", "your-super-secret-jwt-key")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 groq_client = Groq(api_key=GROQ_API_KEY)
 
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-resend.api_key = RESEND_API_KEY
+
 
 # -------------------------------------------------------------------
 # FastAPI app & router
@@ -187,33 +189,53 @@ async def generate_embedding(text: str) -> List[float]:
 
 
 # -------------------------------------------------------------------
-# Email Reminders with Resend
+# Email Reminders with SMTP
 # -------------------------------------------------------------------
+def send_email_sync(to_email: str, subject: str, html_content: str):
+    smtp_email = os.environ["SMTP_EMAIL"]
+    smtp_password = os.environ["SMTP_PASSWORD"]
+    smtp_server = os.environ["SMTP_SERVER"]
+    smtp_port = int(os.environ["SMTP_PORT"])
+
+    msg = MIMEMultipart()
+    msg["From"] = smtp_email
+    msg["To"] = to_email
+    msg["Subject"] = subject
+
+    msg.attach(MIMEText(html_content, "html"))
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_email, smtp_password)
+        server.send_message(msg)
+
+
 async def send_reminder_email(email: str, note_title: str, scheduled_time: str):
-    """Send reminder email via Resend from async code."""
     try:
-        params = {
-            "from": "noreply@yourdomain.com",
-            "to": [email],
-            "subject": f"Reminder: {note_title}",
-            "html": (
-                f"<h2>Note Reminder</h2>"
-                f"<p>This is a reminder for your note: <strong>{note_title}</strong></p>"
-                f"<p>Scheduled for: {scheduled_time}</p>"
-            ),
-        }
+        html = f"""
+        <h2>📌 Note Reminder</h2>
+        <p>This is a reminder for your note:</p>
+        <p><strong>{note_title}</strong></p>
+        <p>Scheduled for: {scheduled_time}</p>
+        """
 
         loop = asyncio.get_event_loop()
-        # Resend client is sync, so run in executor
-        await loop.run_in_executor(None, lambda: resend.Emails.send(params))
+        await loop.run_in_executor(
+            None,
+            send_email_sync,
+            email,
+            f"Reminder: {note_title}",
+            html,
+        )
 
         logging.info(f"Reminder email sent to {email}")
+
     except Exception as e:
-        logging.error(f"Failed to send reminder: {e}")
+        logging.error(f"Failed to send reminder email: {e}")
 
 
 async def check_reminders():
-    """Background task to check and send reminders."""
+    """Background task to check and send reminders (UTC-safe)."""
     now = datetime.now(timezone.utc)
     reminder_time = now + timedelta(hours=5)
 
@@ -223,22 +245,30 @@ async def check_reminders():
 
     for note in notes:
         try:
+            reminder_str = note["scheduled_reminder"]
+
+            # Convert ISO string → timezone-aware UTC datetime
             reminder_dt = datetime.fromisoformat(
-                note["scheduled_reminder"].replace("Z", "+00:00")
+                reminder_str.replace("Z", "+00:00")
             )
+
+            # Force timezone awareness if missing
+            if reminder_dt.tzinfo is None:
+                reminder_dt = reminder_dt.replace(tzinfo=timezone.utc)
 
             if now <= reminder_dt <= reminder_time:
                 user = await db.users.find_one({"id": note["user_id"]})
 
                 if user:
                     await send_reminder_email(
-                        user["email"], note["title"], note["scheduled_reminder"]
+                        user["email"], note["title"], reminder_str
                     )
 
                     await db.notes.update_one(
                         {"id": note["id"]},
                         {"$set": {"reminder_sent": True}},
                     )
+
         except Exception as e:
             logging.error(f"Error processing reminder: {e}")
 
@@ -255,6 +285,18 @@ scheduler.add_job(check_reminders, "interval", minutes=30)
 @api_router.get("/health")
 async def health_check():
     return {"status": "healthy", "message": "NoteGenius API is running"}
+
+
+# ----------------- Email-Testing Routes -----------------
+# @api_router.get("/test-email")
+# async def test_email():
+#     await send_reminder_email(
+#         email="727723euci029@skcet.ac.in",
+#         note_title="Test Reminder",
+#         scheduled_time="Now",
+#     )
+#     return {"status": "email sent"}
+
 
 
 # ----------------- Auth Routes -----------------

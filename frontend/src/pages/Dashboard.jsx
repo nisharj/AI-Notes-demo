@@ -15,8 +15,9 @@ import {
 import { useNavigate } from 'react-router-dom';
 import AskAIModal from '../components/AskAIModal';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API_URL = import.meta.env.VITE_API_URL;
+const API = `${API_URL}/api`;
+
 
 const FOLDERS = ['Work', 'Personal', 'Ideas', 'Meeting Notes'];
 

@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { Sparkles, Send } from 'lucide-react';
 import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API_URL = import.meta.env.VITE_API_URL;
+const API = `${API_URL}/api`;
 
 export default function AskAIModal({ isOpen, onClose, notes }) {
   const [question, setQuestion] = useState('');

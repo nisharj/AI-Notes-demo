@@ -25,14 +25,18 @@ from email.mime.multipart import MIMEMultipart
 # Load environment
 # -------------------------------------------------------------------
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / ".env")
+# load_dotenv(ROOT_DIR / ".env")
+load_dotenv()
 
 # -------------------------------------------------------------------
 # Configuration
 # -------------------------------------------------------------------
-mongo_url = os.environ["MONGO_URL"]
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ["DB_NAME"]]
+mongo_url = os.getenv("MONGO_URL")
+db_name = os.getenv("DB_NAME")
+
+client: AsyncIOMotorClient | None = None
+db = None
+
 
 JWT_SECRET = os.environ.get("JWT_SECRET", "your-super-secret-jwt-key")
 
@@ -46,6 +50,17 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 # -------------------------------------------------------------------
 app = FastAPI(title="AI Notes App")
 api_router = APIRouter(prefix="/api")
+
+@app.on_event("startup")
+async def startup_db():
+    global client, db
+
+    if not mongo_url or not db_name:
+        raise RuntimeError("MONGO_URL or DB_NAME not set")
+
+    client = AsyncIOMotorClient(mongo_url)
+    db = client[db_name]
+
 
 # Security
 security = HTTPBearer()

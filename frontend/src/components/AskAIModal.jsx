@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
-import { toast } from 'sonner';
-import { Sparkles, Send } from 'lucide-react';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL;
-const API = `${API_URL}/api`;
+import React, { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
+import { toast } from "sonner";
+import { Sparkles, Send } from "lucide-react";
+import axios from "axios";
+import { API_URL } from "../config";
 
 export default function AskAIModal({ isOpen, onClose, notes }) {
-  const [question, setQuestion] = useState('');
-  const [response, setResponse] = useState('');
+  const [question, setQuestion] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [useContext, setUseContext] = useState(true);
 
@@ -20,24 +18,26 @@ export default function AskAIModal({ isOpen, onClose, notes }) {
     if (!question.trim()) return;
 
     setLoading(true);
-    setResponse('');
+    setResponse("");
 
     try {
       // Prepare context from recent notes
-      let context = '';
+      let context = "";
       if (useContext && notes.length > 0) {
         const recentNotes = notes.slice(0, 5);
-        context = recentNotes.map(n => `${n.title}: ${n.content.substring(0, 200)}`).join('\n\n');
+        context = recentNotes
+          .map((n) => `${n.title}: ${n.content.substring(0, 200)}`)
+          .join("\n\n");
       }
 
-      const res = await axios.post(`${API}/ai/ask`, {
+      const res = await axios.post(`${API_URL}/ai/ask`, {
         question,
-        context: useContext ? context : null
+        context: useContext ? context : null,
       });
 
       setResponse(res.data.response);
     } catch (error) {
-      toast.error('Failed to get AI response');
+      toast.error("Failed to get AI response");
       console.error(error);
     } finally {
       setLoading(false);
@@ -45,14 +45,17 @@ export default function AskAIModal({ isOpen, onClose, notes }) {
   };
 
   const handleClose = () => {
-    setQuestion('');
-    setResponse('');
+    setQuestion("");
+    setResponse("");
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl glassmorphism" data-testid="ask-ai-modal">
+      <DialogContent
+        className="max-w-2xl glassmorphism"
+        data-testid="ask-ai-modal"
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Sparkles className="h-5 w-5 text-primary" />
@@ -70,7 +73,10 @@ export default function AskAIModal({ isOpen, onClose, notes }) {
               className="rounded border-input"
               data-testid="use-context-checkbox"
             />
-            <label htmlFor="use-context" className="text-sm text-muted-foreground">
+            <label
+              htmlFor="use-context"
+              className="text-sm text-muted-foreground"
+            >
               Use my recent notes as context
             </label>
           </div>
@@ -85,9 +91,9 @@ export default function AskAIModal({ isOpen, onClose, notes }) {
               data-testid="ai-question-input"
             />
 
-            <Button 
-              type="submit" 
-              disabled={loading} 
+            <Button
+              type="submit"
+              disabled={loading}
               className="w-full ai-glow"
               data-testid="ai-submit-button"
             >
@@ -106,12 +112,19 @@ export default function AskAIModal({ isOpen, onClose, notes }) {
           </form>
 
           {response && (
-            <div className="mt-6 p-6 bg-white/90 rounded-lg border border-primary/20 animate-fade-in" data-testid="ai-response">
+            <div
+              className="mt-6 p-6 bg-white/90 rounded-lg border border-primary/20 animate-fade-in"
+              data-testid="ai-response"
+            >
               <div className="flex items-center space-x-2 mb-3">
                 <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">AI Response</span>
+                <span className="text-sm font-medium text-primary">
+                  AI Response
+                </span>
               </div>
-              <p className="text-sm leading-relaxed whitespace-pre-wrap">{response}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                {response}
+              </p>
             </div>
           )}
         </div>

@@ -19,7 +19,10 @@ import base64
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from fastapi.middleware.cors import CORSMiddleware
 
+
+app = FastAPI(title="AI Notes App")
 
 # -------------------------------------------------------------------
 # Load environment
@@ -48,7 +51,6 @@ groq_client = Groq(api_key=GROQ_API_KEY)
 # -------------------------------------------------------------------
 # FastAPI app & router
 # -------------------------------------------------------------------
-app = FastAPI(title="AI Notes App")
 api_router = APIRouter(prefix="/api")
 
 @app.on_event("startup")
@@ -602,11 +604,16 @@ app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=[
+        "https://ai-notes-phi-three.vercel.app",  # ✅ Vercel frontend
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # -------------------------------------------------------------------
 # Logging

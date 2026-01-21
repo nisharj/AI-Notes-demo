@@ -600,7 +600,6 @@ async def get_folders(current_user: dict = Depends(get_current_user)):
 # -------------------------------------------------------------------
 # Include router & middleware
 # -------------------------------------------------------------------
-app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -614,7 +613,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+app.include_router(api_router)
 # -------------------------------------------------------------------
 # Logging
 # -------------------------------------------------------------------

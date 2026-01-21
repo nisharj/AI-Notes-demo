@@ -1,7 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, UploadFile, File, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
@@ -19,10 +18,23 @@ import base64
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
 app = FastAPI(title="AI Notes App")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://ai-notes-phi-three.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # -------------------------------------------------------------------
 # Load environment
@@ -599,20 +611,7 @@ async def get_folders(current_user: dict = Depends(get_current_user)):
 
 # -------------------------------------------------------------------
 # Include router & middleware
-# -------------------------------------------------------------------
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://ai-notes-phi-three.vercel.app",  # ✅ Vercel frontend
-        "http://localhost:5173",
-        "http://localhost:3000",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+# ------------------------------------------------------------------
 app.include_router(api_router)
 # -------------------------------------------------------------------
 # Logging
